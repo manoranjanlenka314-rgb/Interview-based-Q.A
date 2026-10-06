@@ -1,0 +1,494 @@
+16. What is the difference between string and StringBuilder?
+string and StringBuilder are used to work with text in C#. The key difference is that string is immutable, whereas StringBuilder is mutable.
+
+string: Any modification creates a new string object.
+StringBuilder: Modifies its existing character buffer, making it more suitable for repeated changes.
+Usage: Use string for simple or infrequent changes and StringBuilder for frequent string modifications.
+Example: string creates a new object when modified, while StringBuilder efficiently appends or modifies text.
+
+
+
+
+
+using System;
+using System.Text;
+​
+class Program
+{
+    static void Main()
+    {
+        string text = "Hello";
+        text += " World";
+​
+        StringBuilder builder = new StringBuilder("Hello");
+        builder.Append(" World");
+​
+        Console.WriteLine(text);
+        Console.WriteLine(builder);
+    }
+}
+
+Output
+Hello World
+Hello World
+Explanation:
+
+string is immutable, so modifying it creates a new string object.
+StringBuilder is mutable, so it can modify text without creating a new object for every change.
+StringBuilder is generally more efficient when performing frequent string modifications.
+17. What is a class and what is an object?
+A class is a blueprint that defines the data and behavior of objects. An object is a runtime instance of a class that contains its own state and can use the members defined by the class.
+
+Class: Defines members such as fields, properties, and methods.
+Object: Is an instance of a class created using the new keyword.
+Relationship: Multiple objects can be created from the same class, each with its own data.
+18. What are constructors and why are they used?
+A constructor is a special member of a class that is automatically called when an object is created. It is mainly used to initialize the object's fields or properties with required values.
+
+Initialization: Sets the initial state of an object.
+Automatic Invocation: Runs automatically when an object is created using new.
+Types: Common types include parameterless, parameterized, and static constructors.
+19. What is constructor overloading?
+Constructor overloading allows a class to have multiple constructors with different parameter lists. It provides different ways to initialize objects depending on the values available during object creation.
+
+Multiple Constructors: A class can define multiple constructors.
+Different Signatures: Constructors must differ in the number, type, or order of parameters.
+Compile-Time Selection: The compiler selects the appropriate constructor based on the arguments supplied.
+20. What are properties in C#?
+Properties in C# provide a controlled way to access and modify the data of a class. They use get and set accessors to read and assign values while supporting encapsulation.
+
+get: Retrieves the property's value.
+set: Assigns a value to the property.
+Encapsulation: Allows controlled access to internal class data without exposing fields directly.
+Example: Properties allow reading and updating an object's data using get and set accessors.
+
+
+
+
+
+using System;
+​
+class Employee
+{
+    public string Name { get; set; }
+    public int Age { get; set; }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        Employee emp = new Employee();
+​
+        emp.Name = "Robin";
+        emp.Age = 25;
+​
+        Console.WriteLine(emp.Name);
+        Console.WriteLine(emp.Age);
+    }
+}
+
+Output
+Robin
+25
+Explanation:
+
+get is used to read the value of a property.
+set is used to assign or update the value of a property.
+Properties provide controlled access to an object's data.
+C# Interview Questions Intermediate-Level
+Intermediate-level C# interview questions assess candidates’ practical understanding of C# concepts and their ability to write efficient, maintainable, and reliable code.
+
+21. What are access modifiers in C#?
+Access modifiers in C# define the accessibility of classes and their members. They control where a type or member can be accessed from within an application.
+
+public: Accessible from any code that can access the containing type.
+private: Accessible only within the containing type.
+protected: Accessible within the containing type and its derived classes.
+internal: Accessible within the same assembly.
+protected internal: Accessible from the same assembly or from derived classes in other assemblies.
+private protected: Accessible within the containing type and derived classes in the same assembly.
+
+
+
+
+using System;
+​
+class Employee
+{
+    public string Name = "John";
+    private int Salary = 50000;
+    protected string Department = "QA";
+    internal string Company = "ABC";
+    
+    public void Display()
+    {
+        Console.WriteLine(Name);
+        Console.WriteLine(Salary);
+        Console.WriteLine(Department);
+        Console.WriteLine(Company);
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        Employee emp = new Employee();
+​
+        Console.WriteLine(emp.Name);    // Accessible
+        // Console.WriteLine(emp.Salary);    // Not accessible
+        // Console.WriteLine(emp.Department); // Not accessible
+        Console.WriteLine(emp.Company); // Accessible
+    }
+}
+
+Output
+John
+ABC
+Explanation:
+
+public members can be accessed from anywhere the containing type is accessible.
+private members can be accessed only within the same class.
+protected members can be accessed within the class and its derived classes.
+internal members can be accessed anywhere within the same assembly.
+22. Explain the four pillars of Object-Oriented Programming (OOP).
+The four pillars of OOP are Encapsulation, Abstraction, Inheritance, and Polymorphism. Together, they help create code that is modular, reusable, maintainable, and easier to extend.
+
+Encapsulation: Bundles data and the methods that operate on it within a class while restricting direct access to internal state. In C#, this is commonly achieved using access modifiers and properties.
+Abstraction: Hides implementation details and exposes only the essential functionality. In C#, it is commonly implemented using interfaces and abstract classes.
+Inheritance: Allows a derived class to reuse and extend the members of a base class, promoting code reuse and establishing an is-a relationship.
+Polymorphism: Allows the same operation or interface to produce different behavior depending on the object. In C#, it is commonly achieved through method overloading, method overriding, and interfaces.
+23. What is the difference between an Abstract Class and an Interface?
+An abstract class provides a common base with shared state and implementation, while an interface defines a contract that implementing types must follow. The choice depends on whether you need shared behavior or a capability/contract.
+
+Abstract Class: Can contain fields, constructors, properties, concrete methods, and abstract methods. A class can inherit from only one base class.
+Interface: Defines a contract through members such as methods, properties, and events. A class can implement multiple interfaces.
+Usage: Use an abstract class when related classes share common state or implementation; use an interface when different classes need to follow the same contract.
+24. When should you use an Interface instead of an Abstract Class?
+Use an interface when you need to define a contract or capability that can be implemented by different or unrelated classes. Use an abstract class when related classes need to share common state, behavior, or implementation.
+
+Use an Interface when:
+
+We need to define a contract without requiring a shared class hierarchy.
+Multiple unrelated classes should provide the same capability.
+A class needs to implement multiple contracts.
+You want loose coupling and easier dependency substitution.
+Use an Abstract Class when:
+
+Related classes share common state or implementation.
+You need constructors, fields, or protected members.
+You want to provide common functionality for derived classes
+25. What is the difference between Method Overloading and Method Overriding?
+Method overloading and method overriding are forms of polymorphism in C#. Overloading provides multiple methods with the same name but different parameters, while overriding allows a derived class to provide a new implementation of a base-class method.
+
+Method Overloading: Uses the same method name with different parameter lists and is resolved at compile time.
+Method Overriding: Uses the same method signature in a derived class and requires virtual/override (or related overriding mechanisms); it is resolved at runtime.
+Inheritance: Overloading does not require inheritance, while overriding requires a base–derived class relationship.
+Example: The Add() methods demonstrate overloading, while Dog overriding the Sound() method demonstrates overriding.
+
+
+
+
+
+using System;
+​
+class Calculator
+{
+    public int Add(int a, int b)
+    {
+        return a + b;
+    }
+​
+    public int Add(int a, int b, int c)
+    {
+        return a + b + c;
+    }
+}
+​
+class Animal
+{
+    public virtual void Sound()
+    {
+        Console.WriteLine("Animal makes a sound.");
+    }
+}
+​
+class Dog : Animal
+{
+    public override void Sound()
+    {
+        Console.WriteLine("Dog barks.");
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        // Method Overloading
+        Calculator calculator = new Calculator();
+        Console.WriteLine(calculator.Add(10, 20));
+        Console.WriteLine(calculator.Add(10, 20, 30));
+​
+        // Method Overriding
+        Animal animal = new Dog();
+        animal.Sound();
+    }
+}
+
+Output
+30
+60
+Dog barks.
+Explanation:
+
+Add() is overloaded because it has different parameter lists.
+Sound() is overridden because Dog provides its own implementation of the base-class method.
+calculator.Add() is selected at compile time, while animal.Sound() invokes the Dog implementation at runtime.
+26. What is the this keyword?
+The this keyword refers to the current instance of a class. It is mainly used to access instance members and distinguish them from local variables or parameters with the same name.
+
+Current Instance: Refers to the object on which the method or constructor is operating.
+Name Conflict: Distinguishes an instance field or property from a parameter with the same name.
+Member Access: Can be used to explicitly access instance members of the current object.
+Example: The example below uses base to call the base class constructor and method.
+
+
+
+
+
+using System;
+​
+class Employee
+{
+    private string name;
+​
+    public Employee(string name)
+    {
+        this.name = name;
+    }
+​
+    public void Display()
+    {
+        Console.WriteLine(this.name);
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        Employee employee = new Employee("Emma");
+        employee.Display();
+    }
+}
+
+Output
+Emma
+Explanation:
+
+name refers to the constructor parameter.
+this.name refers to the instance field of the current Employee object.
+this.name = name assigns the parameter value to the object's field.
+27. What is the base keyword?
+The base keyword is used to access members of the immediate base class from a derived class.
+
+Accesses a base class method, property, or field.
+Calls a base class constructor.
+Useful when a derived class overrides a base class member.
+Helps distinguish base-class members from derived-class members with the same name.
+Example: A derived class can use base to call the constructor or access members of its immediate base class.
+
+
+
+
+
+using System;
+​
+class Animal
+{
+    public Animal(string name)
+    {
+        Console.WriteLine("Animal: " + name);
+    }
+​
+    public virtual void Sound()
+    {
+        Console.WriteLine("Animal makes a sound.");
+    }
+}
+​
+class Dog : Animal
+{
+    public Dog(string name) : base(name)
+    {
+    }
+​
+    public override void Sound()
+    {
+        base.Sound();
+        Console.WriteLine("Dog barks.");
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        Dog dog = new Dog("Buddy");
+        dog.Sound();
+    }
+}
+
+Output
+Animal: Buddy
+Animal makes a sound.
+Dog barks.
+Explanation:
+
+base(name) calls the constructor of the Animal base class.
+base.Sound() calls the Sound() method defined in the base class.
+base refers to the immediate parent class of the current derived class
+28. What is a static class, and when should it be used?
+A static class is a class that cannot be instantiated and can contain only static members. It is useful for grouping functionality that does not depend on the state of a specific object.
+
+No Instance: Cannot be instantiated using the new keyword.
+Static Members: Its methods, properties, fields, and events must be static.
+Usage: Best suited for stateless utility or helper operations.
+Example: The example below demonstrates a static class used for a calculation.
+
+
+
+
+
+using System;
+​
+static class Calculator
+{
+    public static int Add(int a, int b)
+    {
+        return a + b;
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        int result = Calculator.Add(10, 20);
+        Console.WriteLine(result);
+    }
+}
+
+Output
+30
+Explanation:
+
+Calculator cannot be instantiated because it is a static class.
+Add() is called directly using Calculator.Add().
+The method does not depend on object-specific state.
+Static classes are appropriate when object creation and instance state are unnecessary.
+29. What is a static constructor?
+A static constructor is a special constructor used to initialize static members or perform one-time type-level initialization. It is called automatically by the runtime before the type is first used.
+
+Has no parameters and cannot have an access modifier.
+Executes automatically and cannot be called explicitly.
+Runs only once for the type.
+Commonly used for initializing static fields or performing type-level setup.
+Example: The example below demonstrates a static constructor initializing a static field.
+
+
+
+
+
+using System;
+​
+class Configuration
+{
+    public static string Environment;
+​
+    static Configuration()
+    {
+        Environment = "Production";
+        Console.WriteLine("Static constructor executed.");
+    }
+​
+    public static void Display()
+    {
+        Console.WriteLine("Environment: " + Environment);
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        Configuration.Display();
+        Configuration.Display();
+    }
+}
+
+Output
+Static constructor executed.
+Environment: Production
+Environment: Production
+Explanation:
+
+The first call to Display() triggers the static constructor.
+The constructor initializes Environment before Display() executes.
+The second call uses the already-initialized type, so the constructor does not run again.
+30. What is a destructor (finalizer) and how does it work?
+A destructor, more accurately called a finalizer in C#, is a special method that the Garbage Collector may execute before reclaiming an object's memory.
+
+Declared using ~ClassName().
+Cannot have parameters or an access modifier.
+Cannot be called directly.
+Execution timing is determined by the Garbage Collector.
+A class can have only one finalizer.
+Example: The example below demonstrates a finalizer being invoked during garbage collection.
+
+
+
+
+
+using System;
+​
+class ResourceHandler
+{
+    ~ResourceHandler()
+    {
+        Console.WriteLine("Finalizer executed.");
+    }
+}
+​
+class Program
+{
+    static void Main()
+    {
+        CreateObject();
+​
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+​
+        Console.WriteLine("Program completed.");
+    }
+​
+    static void CreateObject()
+    {
+        ResourceHandler resource = new ResourceHandler();
+    }
+}
+
+Output
+Finalizer executed.
+Program completed.
+Explanation:
+
+CreateObject() creates a ResourceHandler object.
+After the method ends, the object has no remaining references.
+GC.Collect() requests garbage collection.
+GC.WaitForPendingFinalizers() waits for pending finalizers to complete.
+The finalizer may then execute before the object's memory is reclaimed.
+C# Interview Questions for Experienced
+Experience-based C# interview questions assess a candidate’s practical programming experience and problem-solving skills in designing, optimizing, debugging, and maintaining real-world C# applications.
