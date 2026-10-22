@@ -1,0 +1,632 @@
+ What are Generics and why are they useful?
+Generics allow you to define classes, methods, interfaces, and collections with a type parameter, enabling the same code to work with different data types while maintaining type safety.
+
+Why are Generics useful?
+
+Type Safety: Detects incompatible types at compile time.
+Code Reusability: Allows one implementation to work with multiple types.
+Performance: Reduces boxing and unboxing for value types.
+No Unnecessary Casting: Values are retrieved using their specified type.
+Maintainability: Produces cleaner and more reusable code.
+Example: The example below demonstrates a generic class working with different data types.
+
+
+
+
+
+using System;
+​
+public class Repository<T>
+{
+    public T GetItem(T item)
+    {
+        return item;
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        Repository<int> intRepository = new Repository<int>();
+        int result = intRepository.GetItem(100);
+​
+        Repository<string> stringRepository = new Repository<string>();
+        string name = stringRepository.GetItem("Emma");
+​
+        Console.WriteLine(result);
+        Console.WriteLine(name);
+    }
+}
+
+Output
+100
+Emma
+Explanation:
+
+Repository<T> uses T as a type parameter.
+Repository<int> creates a version for int.
+Repository<string> creates a version for string.
+The same GetItem() implementation works with both types.
+Generics provide type safety and code reuse without unnecessary casting.
+32. What is the difference between List<T> and ArrayList?
+List<T> and ArrayList are collection types in C#. The main difference is that List<T> is generic and type-safe, while ArrayList is non-generic and stores elements as object
+
+Feature	List<T>	ArrayList
+Type	Generic collection	Non-generic collection
+Type Safety	Type-safe	Not type-safe
+Data Types	Stores a specific type	Can store different types
+Performance	Generally better	Can be slower due to boxing/unboxing
+Type Casting	Usually not required	Required when retrieving values
+Recommended	Yes, for modern C#	Mostly for legacy code
+33. What is the difference between Dictionary<TKey, TValue> and Hashtable?
+Dictionary<TKey, TValue> and Hashtable store data as key-value pairs. The main difference is that Dictionary<TKey, TValue> is generic and type-safe, while Hashtable is non-generic.
+
+Feature	Dictionary<TKey, TValue>	Hashtable
+Type	Generic	Non-generic
+Type Safety	Compile-time type safety	No compile-time type safety
+Key/Value Types	Explicitly specified	Stored as object
+Casting	Usually not required	May be required
+Performance	Generally better for value types	Can have boxing/unboxing overhead
+Modern Usage	Preferred	Mainly used for legacy code
+Example: The example below demonstrates storing key-value pairs using both collections.
+
+
+
+
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+​
+public class Program
+{
+    public static void Main()
+    {
+        Dictionary<int, string> employees = new Dictionary<int, string>();
+        employees.Add(101, "Emma");
+        employees.Add(102, "Robin");
+​
+        Hashtable employeeTable = new Hashtable();
+        employeeTable.Add(101, "Emma");
+        employeeTable.Add(102, "Robin");
+​
+        Console.WriteLine(employees[101]);
+        Console.WriteLine(employeeTable[101]);
+    }
+}
+
+Output
+Emma
+Emma
+Explanation:
+
+Dictionary<int, string> explicitly defines int keys and string values.
+Hashtable stores keys and values as object.
+Dictionary<TKey, TValue> provides compile-time type checking.
+Hashtable may require casting when retrieving values.
+Dictionary<TKey, TValue> is generally preferred in modern C# applications.
+34. When would you use HashSet<T>?
+HashSet<T> is a generic collection used to store unique elements. It is useful when you need to prevent duplicate values and perform fast search, insertion, and deletion operations.
+
+When would you use HashSet<T>?
+
+Automatically prevents duplicate elements.
+Provides generally O(1) average-time lookup, insertion, and removal.
+Supports set operations such as UnionWith(), IntersectWith(), and ExceptWith().
+Does not provide index-based access.
+Useful for removing duplicates and checking membership.
+Example: The example below demonstrates how HashSet<T> prevents duplicate values.
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+​
+public class Program
+{
+    public static void Main()
+    {
+        HashSet<int> numbers = new HashSet<int>();
+​
+        numbers.Add(10);
+        numbers.Add(20);
+        numbers.Add(10);
+​
+        Console.WriteLine(numbers.Count);
+        Console.WriteLine(numbers.Contains(20));
+    }
+}
+
+Output
+2
+True
+Explanation:
+
+The second 10 is ignored because it already exists.
+Count returns 2 because only unique values are stored.
+Contains() efficiently checks whether a value exists.
+35. What are Stack and Queue collections?
+Stack<T> and Queue<T> are generic collection classes used to store and manage elements based on different ordering principles.
+
+Stack<T>: Follows LIFO (Last In, First Out). The last element added is the first one removed.
+Queue<T>: Follows FIFO (First In, First Out). The first element added is the first one removed.
+Stack<T> uses Push() to add and Pop() to remove elements.
+Queue<T> uses Enqueue() to add and Dequeue() to remove elements.
+Both provide Peek() to view the next element without removing it.
+Example: The example below demonstrates the removal order of both collections.
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+​
+public class Program
+{
+    public static void Main()
+    {
+        Stack<int> stack = new Stack<int>();
+        stack.Push(10);
+        stack.Push(20);
+        stack.Push(30);
+​
+        Console.WriteLine(stack.Pop());
+​
+        Queue<int> queue = new Queue<int>();
+        queue.Enqueue(10);
+        queue.Enqueue(20);
+        queue.Enqueue(30);
+​
+        Console.WriteLine(queue.Dequeue());
+    }
+}
+
+Output
+30
+10
+Explanation:
+
+Stack<T> removes 30 first because it was added last.
+Queue<T> removes 10 first because it was added first.
+Use Stack<T> for LIFO scenarios such as undo operations and backtracking.
+Use Queue<T> for FIFO scenarios such as task processing and buffering.
+36. What is Exception Handling in C#?
+Exception handling is a mechanism used to detect and handle runtime errors without terminating the program unexpectedly. It is implemented using try, catch, and optionally finally blocks.
+
+Example: The example below handles an exception caused by division by zero.
+
+
+
+
+
+using System;
+​
+public class Program
+{
+    public static void Main()
+    {
+        try
+        {
+            int number = 10;
+            int result = number / 0;
+            Console.WriteLine(result);
+        }
+        catch (DivideByZeroException)
+        {
+            Console.WriteLine("Cannot divide by zero.");
+        }
+        finally
+        {
+            Console.WriteLine("Execution completed.");
+        }
+    }
+}
+
+Output
+Cannot divide by zero.
+Execution completed.
+Explanation:
+
+The code inside the try block attempts to perform the division.
+Dividing by zero throws a DivideByZeroException.
+The catch block handles the exception.
+The finally block executes regardless of whether an exception occurs.
+Exception handling helps prevent unexpected application termination and allows errors to be handled appropriately.
+Exception handling should be used for exceptional conditions, not as a replacement for normal program flow.
+37. What is the purpose of the finally block?
+The finally block is used to execute cleanup code that should normally run regardless of whether an exception occurs. It is commonly used to release resources such as files, database connections, or network connections.
+
+Executes after the try block and, if present, the catch block.
+Normally executes whether an exception occurs or not.
+Used for resource cleanup and releasing resources.
+Helps ensure important cleanup operations are performed.
+It can be used with try-catch or with try alone.
+It generally executes even when the try or catch block contains a return statement.
+Example: The example below shows that the finally block executes even when no exception occurs.
+
+
+
+
+
+using System;
+​
+public class Program
+{
+    public static void Main()
+    {
+        try
+        {
+            int result = 10 / 2;
+            Console.WriteLine(result);
+        }
+        catch (DivideByZeroException)
+        {
+            Console.WriteLine("Cannot divide by zero.");
+        }
+        finally
+        {
+            Console.WriteLine("Cleanup completed.");
+        }
+    }
+}
+
+Output
+5
+Cleanup completed.
+Explanation:
+
+The try block performs the division.
+Since no exception occurs, the catch block is skipped.
+The finally block still executes.
+Therefore, finally is useful when cleanup or other necessary code should run regardless of whether an exception occurs.
+38. How do you create and use a Custom Exception?
+A custom exception is a user-defined exception class created by inheriting from the built-in Exception class. It is useful when you need to represent application-specific error conditions that are not adequately described by standard .NET exceptions.
+
+Steps to create and use a custom exception:
+
+Create a class that inherits from Exception.
+Provide a constructor that accepts an error message.
+Use the throw keyword to raise the custom exception.
+Use a try-catch block to handle the custom exception.
+Example: The example below creates and handles a custom exception when an age is below the required minimum.
+
+
+
+
+
+using System;
+​
+public class InvalidAgeException : Exception
+{
+    public InvalidAgeException(string message) : base(message)
+    {
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        try
+        {
+            int age = 16;
+​
+            if (age < 18)
+            {
+                throw new InvalidAgeException("Age must be 18 or above.");
+            }
+​
+            Console.WriteLine("Eligible to vote.");
+        }
+        catch (InvalidAgeException ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+}
+
+Output
+Age must be 18 or above.
+Explanation:
+
+InvalidAgeException is a custom exception that inherits from Exception.
+The constructor passes the custom error message to the base Exception class.
+throw is used to raise the custom exception when age is below 18.
+The catch block catches specifically InvalidAgeException.
+Custom exceptions make application-specific errors more meaningful and easier to handle.
+39. What is LINQ?
+LINQ (Language Integrated Query) is feature that provides a consistent way to query and manipulate data from different data sources such as collections, databases, XML, and other objects using C# syntax.
+
+LINQ stands for Language Integrated Query.
+Provides a consistent syntax for querying different data sources.
+Supports operations such as filtering, sorting, grouping, joining, and projection.
+Can be written using query syntax or method syntax.
+Provides compile-time type checking and IntelliSense support.
+Commonly used with collections such as List<T>, arrays, and other IEnumerable<T> sources.
+why_use_linq_
+Example: The example below uses LINQ to find even numbers from a list.
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+​
+public class Program
+{
+    public static void Main()
+    {
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
+​
+        var evenNumbers = numbers.Where(n => n % 2 == 0);
+​
+        foreach (var number in evenNumbers)
+        {
+            Console.WriteLine(number);
+        }
+    }
+}
+
+Output
+2
+4
+6
+Explanation:
+
+numbers contains a collection of integers.
+Where() is a LINQ method used to filter elements based on a condition.
+n => n % 2 == 0 is a lambda expression that selects even numbers.
+evenNumbers contains only the elements that satisfy the condition.
+LINQ makes data querying more concise, readable, and type-safe.
+40. What is the difference between Query Syntax and Method Syntax in LINQ?
+LINQ provides two ways to write queries Query Syntax and Method Syntax. Both can be used to perform operations such as filtering, sorting, grouping, and selecting data.
+
+Feature	Query Syntax	Method Syntax
+Style	SQL-like syntax	Uses method calls
+Based on	C# query expressions	LINQ extension methods
+Readability	Often easier for complex queries	Often concise for simple operations
+Lambda Expressions	Usually not required	Commonly used
+Operations	Some operations have dedicated query keywords	Provides access to all LINQ methods
+Flexibility	More limited	More flexible
+Example: The example below demonstrates the same LINQ query using both Query Syntax and Method Syntax.
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+​
+public class Program
+{
+    public static void Main()
+    {
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
+​
+        // Query Syntax
+        var queryResult = from n in numbers
+                          where n % 2 == 0
+                          select n;
+​
+        // Method Syntax
+        var methodResult = numbers.Where(n => n % 2 == 0);
+​
+        Console.WriteLine("Query Syntax:");
+        foreach (var number in queryResult)
+        {
+            Console.WriteLine(number);
+        }
+​
+        Console.WriteLine("Method Syntax:");
+        foreach (var number in methodResult)
+        {
+            Console.WriteLine(number);
+        }
+    }
+}
+
+Output
+Query Syntax:
+2
+4
+6
+Method Syntax:
+2
+4
+6
+Explanation:
+
+Query Syntax uses SQL-like keywords such as from, where, and select.
+Method Syntax uses LINQ extension methods such as Where(), Select(), and OrderBy().
+Both approaches can produce the same result.
+Query Syntax can be easier to read for complex queries involving multiple joins and query clauses.
+Method Syntax provides access to the complete set of LINQ extension methods.
+In practice, developers often use Method Syntax because it is concise and works naturally with lambda expressions.
+41. What are the most commonly used LINQ methods?
+LINQ provides many methods for querying, filtering, sorting, grouping, and aggregating data from collections.
+
+Where(): Filters elements based on a condition.
+Select(): Projects each element into a new form.
+OrderBy(): Sorts elements in ascending order.
+FirstOrDefault(): Returns the first matching element or the default value.
+Any(): Checks whether at least one element satisfies a condition
+Count(): Returns the number of elements.
+GroupBy(): Groups elements based on a specified key.
+Join(): Combines elements from two sequences based on matching keys.
+42. What are Extension Methods?
+Extension methods allow you to add new methods to an existing type without modifying, inheriting from, or recompiling the original type. They are defined as static methods inside a static class, with the this keyword applied to the first parameter.
+
+Defined inside a static class.
+The extension method itself must be static.
+The first parameter uses the this keyword to specify the type being extended.
+Allows adding functionality to existing classes and types.
+Can be called using instance-method syntax.
+Commonly used by LINQ to provide methods such as Where(), Select(), and OrderBy().
+Example: The example below adds a custom extension method to the string type.
+
+
+
+
+
+using System;
+​
+public static class StringExtensions
+{
+    public static int WordCount(this string text)
+    {
+        return text.Split(' ', StringSplitOptions.RemoveEmptyEntries).Length;
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        string message = "Hello World from CSharp";
+​
+        int count = message.WordCount();
+​
+        Console.WriteLine(count);
+    }
+}
+
+Output
+4
+Explanation:
+
+StringExtensions is a static class containing the extension method.
+WordCount() is declared as a static method.
+The this string text parameter makes WordCount() an extension method for the string type.
+The method can be called directly on a string object using message.WordCount().
+Extension methods provide a convenient way to add functionality to existing types without changing their source code.
+43. What are Anonymous Types?
+Anonymous types in C# are read-only types created automatically by the compiler without explicitly defining a class or type name. They are commonly used to temporarily group related values, especially in LINQ queries.
+
+Created using the new { } syntax.
+Do not require an explicitly defined class.
+Properties are read-only after initialization.
+The compiler automatically generates the type.
+Commonly used with LINQ projections.
+Typically used for temporary data within a method or local scope.
+Example: The example below creates an anonymous type containing an employee's name and department.
+
+
+
+
+
+using System;
+​
+public class Program
+{
+    public static void Main()
+    {
+        var employee = new
+        {
+            Name = "Emma",
+            Department = "QA"
+        };
+​
+        Console.WriteLine(employee.Name);
+        Console.WriteLine(employee.Department);
+    }
+}
+
+Output
+Emma
+QA
+Explanation:
+
+new { } creates an anonymous type.
+The compiler automatically creates the type based on the specified properties.
+var is used because the anonymous type has no explicit name that can be declared in source code.
+The properties can be accessed using employee.Name and employee.Department.
+Anonymous types are useful when data is needed temporarily and creating a separate named class would be unnecessary.
+44. What is the using statement in C#, and why is it used?
+The using statement is used to automatically manage and release resources held by objects that implement the IDisposable interface. It ensures that the object's Dispose() method is called when the using block is completed.
+
+Automatically calls Dispose() when the using block ends.
+Ensures resources are released even when an exception occurs.
+Helps prevent resource leaks.
+Commonly used with files, streams, database connections, and other disposable resources.
+Provides a cleaner alternative to manually writing a try-finally block for resource cleanup.
+Example: The example below uses a using statement to automatically dispose of a StreamWriter.
+
+
+
+
+
+using System;
+using System.IO;
+​
+public class Program
+{
+    public static void Main()
+    {
+        using (StreamWriter writer = new StreamWriter("example.txt"))
+        {
+            writer.WriteLine("Hello, C#");
+        }
+​
+        Console.WriteLine("File written successfully.");
+    }
+}
+
+Output
+File written successfully.
+Explanation:
+
+StreamWriter implements the IDisposable interface.
+The using statement ensures that Dispose() is called when the block ends.
+The file resource is released automatically.
+If an exception occurs inside the using block, the resource is still disposed of.
+The using statement is essentially a convenient way to implement resource cleanup using a try-finally pattern.
+45. What are Delegates in C#?
+A delegate is a type-safe reference to a method. It allows methods to be passed as arguments, stored in variables, and invoked dynamically. Delegates are commonly used for callbacks, events, and LINQ operations.
+
+Provides a type-safe way to reference methods.
+Can reference methods with a compatible signature.
+Can be used to pass methods as parameters.
+Supports single-cast and multicast delegates.
+Commonly used with events and callbacks.
+Built-in delegates such as Action, Func, and Predicate<T> are frequently used.
+Example: The example below demonstrates how a delegate can reference and invoke a method.
+
+
+
+
+
+using System;
+​
+public delegate void MessageHandler(string message);
+​
+public class Program
+{
+    public static void DisplayMessage(string message)
+    {
+        Console.WriteLine(message);
+    }
+​
+    public static void Main()
+    {
+        MessageHandler handler = DisplayMessage;
+​
+        handler("Hello from delegate!");
+    }
+}
+
+Output
+Hello from delegate!
+Explanation:
+
+MessageHandler is a delegate that can reference methods accepting a string parameter and returning void.
+DisplayMessage() matches the delegate's signature.
+handler stores a reference to the DisplayMessage() method.
+Calling handler() invokes the referenced method.
+Delegates provide a flexible way to implement callbacks and event-driven programming.
