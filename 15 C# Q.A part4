@@ -1,0 +1,504 @@
+. What is the difference between a Delegate and an Event?
+A delegate is a type-safe reference to a method, while an event is a mechanism built on delegates that allows a class to notify other classes when something happens.
+
+Feature	Delegate	Event
+Purpose	References and invokes methods	Provides notification between objects
+Invocation	Can generally be invoked by code that has access to it	Can only be raised from within the declaring class
+Assignment	Can be assigned or replaced	External code can only use += and -=
+Usage	Callbacks, method references	Event-driven programming
+Access	More flexible	More controlled and encapsulated
+Example: The example below demonstrates how an event uses a delegate to notify subscribers.
+
+
+
+
+
+using System;
+​
+public delegate void NotifyHandler(string message);
+​
+public class Publisher
+{
+    public event NotifyHandler Notify;
+​
+    public void SendNotification()
+    {
+        Notify?.Invoke("Notification received.");
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        Publisher publisher = new Publisher();
+​
+        publisher.Notify += message => Console.WriteLine(message);
+​
+        publisher.SendNotification();
+    }
+}
+
+Output
+Notification received.
+Explanation:
+
+NotifyHandler is a delegate that defines the method signature.
+Notify is an event based on that delegate.
+The subscriber registers a handler using +=.
+SendNotification() raises the event using Notify?.Invoke().
+External code cannot directly raise the event; it can only subscribe or unsubscribe.
+Therefore, delegates provide method references, while events provide controlled notification mechanisms built on delegates.
+47. What are Multicast Delegates?
+A multicast delegate is a delegate that can reference and invoke multiple methods. It uses the += and -= operators to add or remove methods from its invocation list.
+
+Can reference multiple methods with the same signature.
+Uses += to add methods to the invocation list.
+Uses -= to remove methods.
+Invokes the registered methods in the order they were added.
+Commonly used for implementing callbacks and event handling.
+Example: The example below demonstrates a multicast delegate calling multiple methods.
+
+
+
+
+
+using System;
+​
+public delegate void MessageHandler();
+​
+public class Program
+{
+    public static void MessageOne()
+    {
+        Console.WriteLine("Message One");
+    }
+​
+    public static void MessageTwo()
+    {
+        Console.WriteLine("Message Two");
+    }
+​
+    public static void Main()
+    {
+        MessageHandler handler = MessageOne;
+        handler += MessageTwo;
+​
+        handler();
+    }
+}
+
+Output
+Message One
+Message Two
+Explanation:
+
+MessageHandler is a delegate with a void return type and no parameters.
+handler initially references MessageOne().
++= adds MessageTwo() to the delegate's invocation list.
+Calling handler() invokes both methods in the order they were added.
+Multicast delegates are useful when multiple methods need to respond to the same operation or notification.
+48. What are Lambda Expressions?
+Lambda expressions are anonymous functions that provide a concise way to define methods or expressions without explicitly declaring a method. They are commonly used with delegates, LINQ, and collection operations.
+
+Provide a concise syntax for writing anonymous functions.
+Use the => operator, called the lambda operator.
+Can accept zero or more parameters.
+Can contain an expression or a statement block.
+Commonly used with Func, Action, Predicate<T>, and LINQ methods.
+Example: The example below uses a lambda expression to filter even numbers from a collection.
+
+
+
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+​
+public class Program
+{
+    public static void Main()
+    {
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5, 6 };
+​
+        var evenNumbers = numbers.Where(n => n % 2 == 0);
+​
+        foreach (int number in evenNumbers)
+        {
+            Console.WriteLine(number);
+        }
+    }
+}
+
+Output
+2
+4
+6
+Explanation:
+
+n => n % 2 == 0 is a lambda expression.
+n represents each element in the collection.
+=> separates the parameter from the expression.
+The expression checks whether the number is even.
+Where() uses the lambda expression to filter the collection.
+Lambda expressions are widely used in LINQ, delegates, callbacks, and event handling.
+49. What are Func, Action and Predicate delegates?
+Func, Action, and Predicate are built-in generic delegate types in C# that make it easier to work with methods as parameters without defining custom delegate types.
+
+Delegate	Return Type	Parameters	Common Use
+Func<T, TResult>	Returns a value	0–16 input parameters	Calculations, transformations, LINQ
+Action<T>	void	0–16 parameters	Performing an action
+Predicate<T>	bool	Exactly 1 parameter	Testing a condition
+Example: The example below demonstrates the use of Func, Action, and Predicate delegates with lambda expressions.
+
+
+
+
+
+using System;
+​
+public class Program
+{
+    public static void Main()
+    {
+        Func<int, int> square = x => x * x;
+        Action<string> display = message => Console.WriteLine(message);
+        Predicate<int> isEven = x => x % 2 == 0;
+​
+        Console.WriteLine(square(5));
+        display("Hello, C#");
+        Console.WriteLine(isEven(10));
+    }
+}
+
+Output
+25
+Hello, C#
+True
+Explanation:
+
+Func<int, int> takes an int and returns an int.
+Action<string> takes a string and returns void.
+Predicate<int> takes an int and returns a bool.
+Lambda expressions are assigned to these delegates.
+50. What is Reflection?
+Reflection is a mechanism that allows a program to inspect and interact with types, assemblies, methods, properties, fields, and other metadata at runtime. It is provided mainly through the System.Reflection namespace.
+
+Allows inspection of types and their members at runtime.
+Can retrieve information about classes, methods, properties, fields, and constructors.
+Can dynamically create objects and invoke methods.
+Commonly used by dependency injection containers, serializers, ORMs, testing frameworks, and plugins.
+Provides flexibility for runtime-based programming, but excessive use can impact performance and reduce compile-time safety.
+51. What are Attributes in C#?
+Attributes are metadata annotations that can be applied to classes, methods, properties, fields, and other program elements. They provide additional information about code that can be inspected at runtime using Reflection.
+
+Can be built-in or custom.
+Custom attributes can be created by inheriting from Attribute.
+Commonly used in serialization, validation, testing frameworks, and configuration.
+52. What are Nullable Value Types and Nullable Reference Types?
+Nullable value types and nullable reference types allow programs to represent values that may be null, but they work differently.
+
+Nullable Value Types: Allow value types such as int, double, and bool to contain null. They are declared using ?, such as int?.
+Nullable Reference Types: Enable the compiler to identify possible null references and provide warnings to help prevent NullReferenceException. They are enabled using nullable context with #nullable enable or project settings.
+Nullable value types are implemented using Nullable<T>.
+Nullable reference types do not create a different runtime type; they primarily provide compile-time null-safety analysis.
+The null-coalescing operator ?? can be used to provide a default value when a nullable value is null.
+53. What is Pattern Matching in C#?
+Pattern matching is allows you to test whether a value matches a specific pattern and perform an action based on the result. It provides a concise way to write type-based and conditional logic.
+
+Supports type, constant, relational, property, and positional patterns.
+Can combine patterns with logical operators such as and, or, and not.
+Commonly used with is expressions and switch expressions.
+54. What are the is and as operators?
+The is and as operators are used for type checking and type conversion. The is operator checks whether an object is compatible with a specified type, while the as operator attempts to convert an object to a specified reference or nullable value type.
+
+is checks whether an object is compatible with a specified type and returns true or false.
+as attempts a type conversion and returns null if the conversion fails.
+is can perform type checking and pattern matching.
+as does not throw an exception when a reference-type conversion fails.
+as cannot be used with non-nullable value types.
+Example: The example below demonstrates how the is operator checks a type and the as operator safely attempts a type conversion.
+
+
+
+
+
+#nullable enable
+​
+using System;
+​
+public class Program
+{
+    public static void Main()
+    {
+        object value = "Hello";
+​
+        if (value is string)
+        {
+            Console.WriteLine("Value is a string.");
+        }
+​
+        string? text = value as string;
+​
+        Console.WriteLine(text);
+    }
+}
+
+Output
+Value is a string.
+Hello
+Explanation:
+
+value is string checks whether value is compatible with string.
+value as string attempts to convert value to string.
+Since value contains a string, the conversion succeeds.
+If the as conversion fails, it returns null instead of throwing an exception.
+Use is when you need to check a type, and as when you want to attempt a safe reference-type conversion.
+55. What is the difference between == and .Equals()?
+Both == and .Equals() can be used to compare values in C#, but their behavior depends on the type and how equality is implemented.
+
+Feature	== Operator	.Equals() Method
+Type	Operator	Method
+Purpose	Compares values or references depending on the type	Determines whether two objects are equal
+Customization	Can be overloaded	Can be overridden
+Null Handling	Can compare two null references safely	Calling it on a null reference causes NullReferenceException
+Common Usage	Simple equality comparisons	Object/value equality
+Example: The example below demonstrates the difference between reference equality and value equality.
+
+
+
+
+
+using System;
+​
+public class Person
+{
+    public string Name { get; set; }
+​
+    public override bool Equals(object obj)
+    {
+        return obj is Person person && Name == person.Name;
+    }
+​
+    public override int GetHashCode()
+    {
+        return Name.GetHashCode();
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        Person person1 = new Person { Name = "Saurabh" };
+        Person person2 = new Person { Name = "Saurabh" };
+​
+        Console.WriteLine(person1 == person2);
+        Console.WriteLine(person1.Equals(person2));
+    }
+}
+
+Output
+False
+True
+Explanation:
+
+== compares the two Person references because Person does not overload the == operator.
+person1 and person2 are different objects, so == returns false.
+.Equals() is overridden to compare the Name values, so it returns true.
+For reference types, the exact behavior of both depends on whether equality operators or Equals() have been overridden.
+For strings, == and .Equals() both perform content-based comparison.
+56. What is Garbage Collection (GC)?
+Garbage Collection (GC) is an automatic memory management feature of .NET that identifies unreachable objects and reclaims the memory they occupy.
+
+Automatically manages memory on the managed heap.
+Removes objects that are no longer reachable.
+Uses Gen 0, Gen 1, and Gen 2 to optimize collection.
+Runs automatically based on the runtime's memory requirements.
+Reduces the need for manual memory management.
+Example: In the example below, the object becomes eligible for garbage collection after its reference is removed.
+
+
+
+
+
+using System;
+​
+public class Employee
+{
+    public string Name { get; set; }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        Employee employee = new Employee();
+        employee = null;
+​
+        Console.WriteLine("Object is eligible for garbage collection.");
+    }
+}
+
+Output
+Object is eligible for garbage collection.
+Explanation:
+
+The Employee object is created on the managed heap.
+Setting employee to null removes its reference.
+If no other references exist, the object becomes eligible for garbage collection.
+The GC automatically determines when to reclaim its memory.
+57. What is the IDisposable interface?
+IDisposable is an interface used to provide a standard way to release unmanaged resources or perform cleanup that should happen deterministically. It defines a single Dispose() method.
+
+Declares the Dispose() method.
+Used for deterministic resource cleanup.
+Commonly used with files, streams, database connections, and other disposable resources.
+Works with the using statement to ensure Dispose() is called automatically.
+Example: The example below demonstrates implementing IDisposable and releasing a resource using Dispose()
+
+
+
+
+
+using System;
+​
+public class Resource : IDisposable
+{
+    public void Dispose()
+    {
+        Console.WriteLine("Resource released.");
+    }
+}
+​
+public class Program
+{
+    public static void Main()
+    {
+        using (Resource resource = new Resource())
+        {
+            Console.WriteLine("Resource is in use.");
+        }
+    }
+}
+
+Output
+Resource is in use.
+Resource released.
+Explanation:
+
+Resource implements the IDisposable interface.
+Dispose() contains the cleanup logic.
+The using statement automatically calls Dispose() when the block ends.
+IDisposable is used when resources need deterministic cleanup, rather than waiting for garbage collection.
+58. What is the difference between Dispose() and Finalize()?
+Dispose() and Finalize() are both related to resource cleanup, but they differ in when and how cleanup occurs.
+
+Feature	Dispose()	Finalize()
+Purpose	Deterministic cleanup	Backup cleanup for unmanaged resources
+Called by	Code or using statement	Garbage Collector
+Timing	Explicit and predictable	Non-deterministic
+Interface	Implemented through IDisposable	Implemented using a finalizer
+Performance	Generally more efficient	Adds GC overhead
+Recommended	Preferred for resource cleanup	Use only when necessary
+59. What is Multithreading?
+Multithreading is a technique in which a program uses multiple threads to execute different parts of work concurrently within the same process.
+
+A thread is an independent path of execution.
+Multiple threads can make progress concurrently.
+Threads within the same process share memory and resources.
+Useful for improving application responsiveness and handling multiple tasks.
+Requires synchronization when multiple threads access shared data.
+Example: The example below creates two threads that execute separate methods.
+
+
+
+
+
+using System;
+using System.Threading;
+​
+public class Program
+{
+    static void Task1()
+    {
+        Console.WriteLine("Task 1");
+    }
+​
+    static void Task2()
+    {
+        Console.WriteLine("Task 2");
+    }
+​
+    public static void Main()
+    {
+        Thread thread1 = new Thread(Task1);
+        Thread thread2 = new Thread(Task2);
+​
+        thread1.Start();
+        thread2.Start();
+​
+        thread1.Join();
+        thread2.Join();
+    }
+}
+
+Output
+Task 2
+Task 1
+Explanation:
+
+Two separate threads are created for Task1() and Task2().
+Start() begins execution of each thread.
+Join() waits for both threads to complete.
+The execution order may vary because thread scheduling is managed by the operating system.
+60. What is the difference between a Thread and a Task?
+A Thread represents an actual execution thread, while a Task represents a unit of work that is managed by the .NET Task Parallel Library (TPL).
+
+Feature	Thread	Task
+Abstraction	Low-level	High-level
+Management	Manually managed	Runtime-managed
+Return Value	Not directly supported	Supported with Task<T>
+async/await	Not designed for it	Fully supported
+Usage	Specialized threading needs	Modern asynchronous/concurrent operations
+Example: The example below runs a task asynchronously.
+
+
+
+
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+​
+public class Program
+{
+    public static void Main()
+    {
+        Thread thread = new Thread(() =>
+        {
+            Console.WriteLine("Running on Thread");
+        });
+​
+        thread.Start();
+        thread.Join();
+​
+        Task task = Task.Run(() =>
+        {
+            Console.WriteLine("Running on Task");
+        });
+​
+        task.Wait();
+    }
+}
+
+Output
+Running on Thread
+Running on Task
+Explanation:
+
+Thread gives direct control over an individual operating-system thread.
+Task represents a unit of work and lets the runtime manage how that work is executed.
+Tasks integrate naturally with async/await, cancellation, continuations, and composition.
+For most modern application code, Task is preferred over manually creating Thread objects
