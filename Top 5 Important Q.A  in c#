@@ -1,0 +1,141 @@
+61. What are async and await?
+async and await are C# keywords used for asynchronous programming. They allow a method to perform an asynchronous operation without blocking the calling thread while waiting for the operation to complete.
+
+async marks a method as asynchronous.
+await pauses the method until the awaited operation completes without blocking the thread.
+Commonly used for I/O-bound operations such as API calls, file operations, and database queries.
+Typically used with Task and Task<T>.
+Example: The example below demonstrates how async and await perform an asynchronous operation without blocking the calling thread.
+
+
+
+
+
+using System;
+using System.Threading.Tasks;
+​
+public class Program
+{
+    static async Task GetDataAsync()
+    {
+        await Task.Delay(1000);
+        Console.WriteLine("Data received.");
+    }
+​
+    public static async Task Main()
+    {
+        await GetDataAsync();
+    }
+}
+
+Output
+Data received.
+Explanation:
+
+async allows GetDataAsync() to use await.
+Task.Delay() simulates an asynchronous operation.
+await waits for the task to complete without blocking the calling thread.
+Task represents the ongoing asynchronous operation.
+62. What is a Race Condition?
+A race condition occurs when multiple threads access and modify shared data concurrently, and the program's result depends on the timing or order of execution.
+
+Can produce unpredictable or incorrect results.
+Common when at least one thread modifies the shared data.
+Can be prevented using synchronization mechanisms such as lock, Monitor, or other thread-safe constructs.
+Example: The example below demonstrates a race condition when multiple threads update the same variable.
+
+
+
+
+
+using System;
+using System.Threading.Tasks;
+​
+public class Program
+{
+    static int counter = 0;
+​
+    public static void Main()
+    {
+        Parallel.For(0, 10000, i =>
+        {
+            counter++;
+        });
+​
+        Console.WriteLine(counter);
+    }
+}
+
+Output
+10000
+Explanation:
+
+Multiple threads modify the shared counter variable.
+counter++ is not an atomic operation.
+Threads can overwrite each other's updates.
+The final result can vary between executions.
+Synchronization is required when multiple threads modify shared state.
+63. What is Thread Synchronization and how does the lock keyword work?
+Thread synchronization coordinates access to shared resources so that only one thread can execute a protected section of code at a time. The lock keyword provides mutual exclusion by allowing only one thread to enter the locked block.
+
+Allows only one thread to enter a lock block at a time.
+Other threads wait until the lock becomes available.
+The lock is automatically released when the block exits.
+Uses a dedicated synchronization object, commonly private readonly object.
+Example: The example below uses lock to safely update a shared counter.
+
+
+
+
+
+using System;
+using System.Threading.Tasks;
+​
+public class Program
+{
+    static int counter = 0;
+    static readonly object syncLock = new object();
+​
+    public static void Main()
+    {
+        Parallel.For(0, 10000, i =>
+        {
+            lock (syncLock)
+            {
+                counter++;
+            }
+        });
+​
+        Console.WriteLine(counter);
+    }
+}
+
+Output
+10000
+Explanation:
+
+syncLock acts as the synchronization object.
+lock ensures exclusive access to the counter update.
+Threads that cannot acquire the lock wait until it is released.
+The lock is automatically released after the protected code finishes
+64. What are the SOLID principles?
+SOLID is a set of five object-oriented design principles that help create software that is maintainable, flexible, scalable, and easier to test.
+
+S -> Single Responsibility Principle (SRP): A class should have one responsibility and one reason to change.
+O -> Open/Closed Principle (OCP): Software entities should be open for extension but closed for modification.
+L -> Liskov Substitution Principle (LSP): Derived classes should be substitutable for their base classes without changing the expected behavior.
+I -> Interface Segregation Principle (ISP): Clients should not be forced to depend on methods they do not use.
+D -> Dependency Inversion Principle (DIP): High-level modules should depend on abstractions rather than concrete implementations.
+65. Explain the architecture of a typical .NET application.
+A typical .NET application is organized into multiple layers, where each layer has a specific responsibility. This separation improves maintainability, testability, and scalability.
+
+Presentation Layer: Handles user interaction and HTTP requests/responses. Examples include ASP.NET Core MVC, Razor Pages, and Web APIs.
+Business Logic Layer: Contains business rules, validations, and application logic.
+Data Access Layer: Handles communication with databases and external data sources using technologies such as Entity Framework Core or ADO.NET.
+Domain/Model Layer: Defines entities, domain models, and core business concepts.
+Infrastructure Layer: Provides implementations for external concerns such as databases, file systems, messaging, logging, and third-party services.
+Comment
+V
+
+varshachoudhary
+
